@@ -12,6 +12,7 @@ import {Home} from '../screen';
 import {COLORS, icons} from '../constants';
 
 const Tab = createBottomTabNavigator();
+/////////////////////////////////////////////////////////////////////////
 const TabBarCustomButton = ({accessibilityState, children, onPress}) => {
   var isSelected = accessibilityState.selected;
 
@@ -59,7 +60,7 @@ const TabBarCustomButton = ({accessibilityState, children, onPress}) => {
     );
   }
 };
-
+///////////////////////////////////////////
 const CustomTabBar = (props) => {
   if (isIphoneX()) {
     return (
@@ -80,6 +81,7 @@ const CustomTabBar = (props) => {
     return <BottomTabBar {...props.props} />;
   }
 };
+/////////////////////////////
 const Tabs = () => {
   return (
     <Tab.Navigator
