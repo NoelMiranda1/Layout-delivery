@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {icons, images, SIZES, FONTS, COLORS} from '../constants';
 
-const Home = () => {
+const Home = ({navigation}) => {
   // Dummy Datas
 
   const initialCurrentLocation = {
@@ -82,7 +82,7 @@ const Home = () => {
   const restaurantData = [
     {
       id: 1,
-      name: 'ByProgrammers Burger',
+      name: 'Burger King',
       rating: 4.8,
       categories: [5, 7],
       priceRating: affordable,
@@ -125,7 +125,7 @@ const Home = () => {
     },
     {
       id: 2,
-      name: 'ByProgrammers Pizza',
+      name: 'Pizza Hut',
       rating: 4.8,
       categories: [2, 4, 6],
       priceRating: expensive,
@@ -177,7 +177,7 @@ const Home = () => {
     },
     {
       id: 3,
-      name: 'ByProgrammers Hotdogs',
+      name: 'Hotdogs Arleking',
       rating: 4.8,
       categories: [3],
       priceRating: expensive,
@@ -204,7 +204,7 @@ const Home = () => {
     },
     {
       id: 4,
-      name: 'ByProgrammers Sushi',
+      name: 'Sushi いいもの',
       rating: 4.8,
       categories: [8],
       priceRating: expensive,
@@ -231,7 +231,7 @@ const Home = () => {
     },
     {
       id: 5,
-      name: 'ByProgrammers Cuisine',
+      name: 'Cuisine',
       rating: 4.8,
       categories: [1, 2],
       priceRating: affordable,
@@ -282,7 +282,7 @@ const Home = () => {
     },
     {
       id: 6,
-      name: 'ByProgrammers Dessets',
+      name: 'Dessets',
       rating: 4.9,
       categories: [9, 10],
       priceRating: affordable,
@@ -340,6 +340,11 @@ const Home = () => {
 
     setRestaurants(restaurantList);
     setSelectedCategory(category);
+  }
+  function getCategoryById(id) {
+    let category = categories.filter((a) => a.id == id);
+    if (category.length > 0) return category[0].name;
+    return '';
   }
 
   function renderheader() {
@@ -438,13 +443,85 @@ const Home = () => {
   function renderRestaurant() {
     const renderItem = ({item}) => {
       return (
-        <TouchableOpacity style={style.rest}>
-          <View>
+        <TouchableOpacity
+          style={style.rest}
+          onPress={() =>
+            navigation.navigate('Restaurant', {item, currentLocation})
+          }>
+          <View style={{marginBottom: SIZES.padding}}>
             <Image
               source={item.photo}
               resizeMode="cover"
               style={style.imgrest}
             />
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                height: 50,
+                width: SIZES.width * 0.3,
+                backgroundColor: COLORS.white,
+                borderTopRightRadius: SIZES.radius,
+                borderBottomLeftRadius: SIZES.radius,
+                alignItems: 'center',
+                justifyContent: 'center',
+                ...style.shadow,
+              }}>
+              <Text style={{...FONTS.h4}}>{item.duration}</Text>
+            </View>
+          </View>
+          {/*informacion del restaurante */}
+          <Text style={{...FONTS.body2}}>{item.name}</Text>
+          <View
+            style={{
+              marginTop: SIZES.padding,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={icons.star}
+              resizeMode="contain"
+              style={{
+                height: 20,
+                width: 20,
+                marginRight: 10,
+                tintColor: COLORS.primary,
+              }}
+            />
+            <Text style={{...FONTS.body3}}>{item.rating}</Text>
+            {/* Categorias */}
+            <View
+              style={{
+                flexDirection: 'row',
+                marginLeft: 10,
+              }}>
+              {item.categories.map((categoryId) => {
+                return (
+                  <View key={categoryId} style={{flexDirection: 'row'}}>
+                    <Text style={{...FONTS.body3}}>
+                      {getCategoryById(categoryId)}
+                    </Text>
+                    <Text style={{...FONTS.h3, color: COLORS.darkgray}}>
+                      {' '}
+                      .{' '}
+                    </Text>
+                  </View>
+                );
+              })}
+              {[1, 2, 3].map((priceRating) => (
+                <Text
+                  key={priceRating}
+                  style={{
+                    ...FONTS.body3,
+                    color:
+                      priceRating <= item.priceRating
+                        ? COLORS.black
+                        : COLORS.darkgray,
+                  }}>
+                  $
+                </Text>
+              ))}
+            </View>
           </View>
         </TouchableOpacity>
       );
