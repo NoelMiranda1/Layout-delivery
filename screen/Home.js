@@ -332,6 +332,16 @@ const Home = () => {
     initialCurrentLocation,
   );
 
+  function onSelectCategory(category) {
+    // Filtro de restaurantes
+    let restaurantList = restaurantData.filter((data) =>
+      data.categories.includes(category.id),
+    );
+
+    setRestaurants(restaurantList);
+    setSelectedCategory(category);
+  }
+
   function renderheader() {
     return (
       <View style={style.header}>
@@ -358,7 +368,107 @@ const Home = () => {
     );
   }
 
-  return <SafeAreaView style={style.container}>{renderheader()}</SafeAreaView>;
+  function renderMainCategories() {
+    const renderItem = ({item}) => {
+      return (
+        <TouchableOpacity
+          style={
+            (style.shadow,
+            {
+              padding: SIZES.padding,
+              paddingBottom: SIZES.padding * 2,
+              backgroundColor:
+                selectedCategory?.id == item.id
+                  ? COLORS.primary
+                  : COLORS.secondary,
+              borderRadius: SIZES.radius,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: SIZES.padding,
+              width: 110,
+            })
+          }
+          onPress={() => onSelectCategory(item)}>
+          <View
+            style={{
+              width: 70,
+              height: 70,
+              borderRadius: 100,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor:
+                selectedCategory?.id == item.id
+                  ? COLORS.white
+                  : COLORS.lightGray4,
+            }}>
+            <Image
+              source={item.icon}
+              resizeMode="contain"
+              style={style.imgcat}
+            />
+          </View>
+          <Text
+            style={{
+              color:
+                selectedCategory?.id == item.id ? COLORS.white : COLORS.black,
+              padding: SIZES.padding,
+              ...FONTS.body5,
+            }}>
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <View style={style.main}>
+        <Text style={style.textmain}>Main</Text>
+        <Text style={style.textmain}>Categories</Text>
+        <FlatList
+          data={categories}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={{paddingVertical: SIZES.padding * 2}}
+        />
+      </View>
+    );
+  }
+
+  function renderRestaurant() {
+    const renderItem = ({item}) => {
+      return (
+        <TouchableOpacity style={style.rest}>
+          <View>
+            <Image
+              source={item.photo}
+              resizeMode="cover"
+              style={style.imgrest}
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <FlatList
+        data={restaurants}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{
+          paddingHorizontal: SIZES.padding * 2,
+          paddingBottom: 30,
+        }}
+      />
+    );
+  }
+
+  return (
+    <SafeAreaView style={style.container}>
+      {renderheader()}
+      {renderMainCategories()}
+      {renderRestaurant()}
+    </SafeAreaView>
+  );
 };
 
 const style = StyleSheet.create({
@@ -409,6 +519,24 @@ const style = StyleSheet.create({
     width: 50,
     paddingRight: SIZES.padding * 2,
     justifyContent: 'center',
+  },
+  main: {
+    padding: SIZES.padding * 2,
+  },
+  textmain: {
+    ...FONTS.h1,
+  },
+  imgcat: {
+    width: 40,
+    height: 40,
+  },
+  rest: {
+    marginBottom: SIZES.padding * 2,
+  },
+  imgrest: {
+    width: '100%',
+    height: 200,
+    borderRadius: SIZES.radius,
   },
 });
 
