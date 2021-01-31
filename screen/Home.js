@@ -14,10 +14,10 @@ const Home = ({navigation}) => {
   // Dummy Datas
 
   const initialCurrentLocation = {
-    streetName: 'El aguacate',
+    streetName: 'Nandaime',
     gps: {
-      latitude: 11.878335774474255,
-      longitude: -86.04808153156445,
+      latitude: 11.756924,
+      longitude: -86.047684,
     },
   };
 
